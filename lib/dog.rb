@@ -85,7 +85,7 @@ class Dog
         end.first
     end
 
-    self.find_or_create_by(name, breed)
+    def self.find_or_create_by(name:, breed:)
         sql = <<-SQL
             SELECT *
             FROM dogs
@@ -94,6 +94,7 @@ class Dog
         SQL
 
         DB[:conn].execute(sql, name, breed).map do |row|
-            self.new_from_db(row)
-        end
+            self.create(row)
+        end.first
+    end
 end
